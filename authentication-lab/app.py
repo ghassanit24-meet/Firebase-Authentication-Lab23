@@ -12,12 +12,15 @@ config = {
   "storageBucket": "ghassan-300a1.appspot.com",
   "messagingSenderId": "121007362148",
   "appId": "1:121007362148:web:dd47ba78de35d8843d8f71",
-  "measurementId": "G-4HYWBJN6RZ"
-  "databaseURL": ""
+  "measurementId": "G-4HYWBJN6RZ",
+  "databaseURL": "https://ghassan-300a1-default-rtdb.firebaseio.com/"
 }
+firebase = pyrebase.initialize_app(config)
+auth = firebase.auth()
+db = firebase.database()
 
 @app.route('/', methods=['GET', 'POST'])
-def signin():
+def hello():
     return render_template("signin.html")
 
 
@@ -27,9 +30,9 @@ def signup():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+        added_info = {"email": email, "password": password, "full_name": full_name, "username": username, "bio":bio}
         try:
-            login_session['user'] = 
-                auth.create_user_with_email_and_password(email, password)
+            login_session['user'] = auth.create_user_with_email_and_password(email, password)
             return redirect(url_for("add_tweet"))
         except:
             error = "Authentication failed"
@@ -47,8 +50,7 @@ def signin():
         email = request.form['email']
         password = request.form['password']
         try:
-            login_session['user']=
-                auth.sign_in_with_email_and_password(email, password)
+            login_session['user']= auth.sign_in_with_email_and_password(email, password)
             return redirect(url_for("add_tweet"))
         except:
             error = "Authentication failed"
